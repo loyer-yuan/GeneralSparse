@@ -1,0 +1,88 @@
+#include "data_transform_step.hpp"
+
+get_begin_BMTs_after_merge_thread::get_begin_BMTs_after_merge_thread(shared_ptr<meta_data_set> meta_data_set_ptr, POS_TYPE pos, int merge_num, int target_matrix_id)
+    : basic_data_transform_step("get_begin_BMTs_after_merge_thread", meta_data_set_ptr)
+{
+    assert(meta_data_set_ptr != NULL);
+    assert(meta_data_set_ptr->check());
+    assert(target_matrix_id >= 0);
+
+    this->target_matrix_id = target_matrix_id;
+    this->pos = pos;
+    this->merge_num = merge_num;
+}
+
+void get_begin_BMTs_after_merge_thread::run(bool check)
+{
+    if (check)
+    {
+        assert(this->target_matrix_id >= 0);
+
+        assert(this->meta_data_set_ptr->is_exist(THREAD_META, "first_nz_indices", this->target_matrix_id));
+    }
+
+    shared_ptr<data_item_record> first_nz_indices_record(new data_item_record(THREAD_META, "first_nz_indices", this->target_matrix_id));
+    this->source_data_item_ptr_vec.push_back(first_nz_indices_record);
+
+    shared_ptr<universal_array> BMT_first_nzs_ptr = this->meta_data_set_ptr->get_element(THREAD_META, "first_nz_indices", this->target_matrix_id)->get_metadata_arr();
+
+    vector<unsigned long> first_BMT_vec;
+
+    for (unsigned long j = 0; j < BMT_first_nzs_ptr->get_len() - 1; j += this->merge_num)
+    {
+        first_BMT_vec.push_back(j);
+    }
+
+    first_BMT_vec.push_back(BMT_first_nzs_ptr->get_len() - 1);
+
+    // 将数据放到metadata set中
+    shared_ptr<universal_array> first_BMT_ptr(new universal_array(&(first_BMT_vec[0]), first_BMT_vec.size(), UNSIGNED_LONG));
+    shared_ptr<meta_data_item> first_BMT_item(new meta_data_item(first_BMT_ptr, this->pos, "first_BMT_indices", this->target_matrix_id));
+    this->meta_data_set_ptr->add_element(first_BMT_item);
+
+    // 执行记录
+    shared_ptr<data_item_record> first_BMT_record(new data_item_record(this->pos, "first_BMT_indices", this->target_matrix_id));
+    this->dest_data_item_ptr_vec.push_back(first_BMT_record);
+
+    this->is_run = true;
+}
+
+vector<shared_ptr<data_item_record>> get_begin_BMTs_after_merge_thread::get_source_data_item_ptr_in_data_transform_step()
+{
+    assert(this->meta_data_set_ptr != NULL);
+    assert(this->meta_data_set_ptr->check());
+    assert(this->target_matrix_id >= 0);
+    assert(this->is_run == true);
+
+    // 空指针检查
+    for (unsigned long i = 0; i < this->source_data_item_ptr_vec.size(); i++)
+    {
+        assert(this->source_data_item_ptr_vec[i] != NULL);
+    }
+
+    return this->source_data_item_ptr_vec;
+}
+
+vector<shared_ptr<data_item_record>> get_begin_BMTs_after_merge_thread::get_dest_data_item_ptr_in_data_transform_step_without_check()
+{
+    assert(this->meta_data_set_ptr != NULL);
+    assert(this->meta_data_set_ptr->check());
+    assert(this->target_matrix_id >= 0);
+    assert(this->is_run == true);
+
+    for (unsigned long i = 0; i < this->dest_data_item_ptr_vec.size(); i++)
+    {
+        assert(this->dest_data_item_ptr_vec[i] != NULL);
+    }
+
+    return this->dest_data_item_ptr_vec;
+}
+
+string get_begin_BMTs_after_merge_thread::convert_to_string()
+{
+    assert(this->target_matrix_id >= 0);
+
+    string return_str = "get_begin_BMTs_after_merge_thread::{name:\"" + name + "\",target_matrix_id:" + to_string(target_matrix_id) + "}";
+
+    return return_str;
+}

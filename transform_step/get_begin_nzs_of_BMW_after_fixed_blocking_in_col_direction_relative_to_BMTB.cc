@@ -1,0 +1,232 @@
+#include "../data_transform_step.hpp"
+
+get_begin_nzs_of_BMW_after_fixed_blocking_in_col_direction_relative_to_BMTB::get_begin_nzs_of_BMW_after_fixed_blocking_in_col_direction_relative_to_BMTB(shared_ptr<meta_data_set> meta_data_set_ptr, int target_matrix_id, int col_size)
+    : basic_data_transform_step("get_begin_nzs_of_BMW_after_fixed_blocking_in_col_direction_relative_to_BMTB", meta_data_set_ptr)
+{
+    assert(meta_data_set_ptr != NULL);
+    assert(this->meta_data_set_ptr->check());
+    assert(target_matrix_id >= 0);
+    assert(col_size > 0);
+
+    this->target_matrix_id = target_matrix_id;
+    this->fixed_col_block_size = col_size;
+}
+
+void get_begin_nzs_of_BMW_after_fixed_blocking_in_col_direction_relative_to_BMTB::run(bool check)
+{
+    if (check)
+    {
+        assert(target_matrix_id >= 0);
+        assert(this->fixed_col_block_size > 0);
+        // 检查
+        assert(this->meta_data_set_ptr != NULL);
+        assert(this->meta_data_set_ptr->check());
+
+        // 查看当前子块的边界
+        assert(this->meta_data_set_ptr->is_exist(GLOBAL_META, "begin_row_index", this->target_matrix_id));
+        assert(this->meta_data_set_ptr->is_exist(GLOBAL_META, "end_row_index", this->target_matrix_id));
+        // 非零元行索引
+        assert(this->meta_data_set_ptr->is_exist(GLOBAL_META, "nz_row_indices", this->target_matrix_id));
+    }
+
+    unsigned long start_row_index = this->meta_data_set_ptr->get_element(GLOBAL_META, "begin_row_index", this->target_matrix_id)->get_metadata_arr()->read_integer_from_arr(0);
+    unsigned long end_row_index = this->meta_data_set_ptr->get_element(GLOBAL_META, "end_row_index", this->target_matrix_id)->get_metadata_arr()->read_integer_from_arr(0);
+    // 行索引，得到每一行的非零元数量，从而得到分块点
+    shared_ptr<universal_array> nz_row_indices_ptr = this->meta_data_set_ptr->get_element(GLOBAL_META, "nz_row_indices", this->target_matrix_id)->get_metadata_arr();
+
+    // 计入输入数据
+    shared_ptr<data_item_record> start_row_index_record(new data_item_record(GLOBAL_META, "begin_row_index", this->target_matrix_id));
+    this->source_data_item_ptr_vec.push_back(start_row_index_record);
+    shared_ptr<data_item_record> end_row_index_record(new data_item_record(GLOBAL_META, "end_row_index", this->target_matrix_id));
+    this->source_data_item_ptr_vec.push_back(end_row_index_record);
+    shared_ptr<data_item_record> nz_row_indices_record(new data_item_record(GLOBAL_META, "nz_row_indices", this->target_matrix_id));
+    this->source_data_item_ptr_vec.push_back(nz_row_indices_record);
+
+    if (check)
+    {
+        assert(end_row_index >= start_row_index);
+    }
+
+    // 查看真正的行结束位置，如果有padding，real_end_row_index可能会更大
+    unsigned long real_end_row_index = start_row_index + nz_row_indices_ptr->read_integer_from_arr(nz_row_indices_ptr->get_len() - 1);
+
+    if (end_row_index < real_end_row_index)
+    {
+        end_row_index = real_end_row_index;
+    }
+    unsigned long row_num = end_row_index - start_row_index + 1;
+
+    vector<unsigned long> nnz_of_each_row = get_nnz_of_each_row_in_spec_range(nz_row_indices_ptr, 0, row_num - 1, 0, nz_row_indices_ptr->get_len() - 1);
+
+    if (check)
+    {
+        assert(end_row_index >= start_row_index);
+        // 查看当前上一个父块的类型
+        bool BMTB_blocking_existing = this->meta_data_set_ptr->is_exist(TBLOCK_META, "first_row_indices", this->target_matrix_id);
+
+        // 父块必须存在
+        assert(BMTB_blocking_existing == true);
+
+        // 父块必须是行切分
+        if (BMTB_blocking_existing == true)
+        {
+            assert(has_row_direction_blocking_in_specific_level(this->meta_data_set_ptr, TBLOCK_META, this->target_matrix_id));
+        }
+        // 获取每一行的非零元数量
+        assert(nnz_of_each_row.size() == row_num);
+        // 获取当前父块的非零元索引和行索引
+        assert(this->meta_data_set_ptr->is_exist(TBLOCK_META, "first_row_indices", this->target_matrix_id));
+        assert(this->meta_data_set_ptr->is_exist(TBLOCK_META, "first_nz_indices", this->target_matrix_id));
+    }
+
+    shared_ptr<universal_array> BMTB_first_row_indices_ptr = this->meta_data_set_ptr->get_element(TBLOCK_META, "first_row_indices", this->target_matrix_id)->get_metadata_arr();
+    shared_ptr<universal_array> BMTB_first_nz_indices_ptr = NULL;
+    if (check)
+    {
+        BMTB_first_nz_indices_ptr = this->meta_data_set_ptr->get_element(TBLOCK_META, "first_nz_indices", this->target_matrix_id)->get_metadata_arr();
+
+        assert(BMTB_first_row_indices_ptr->read_integer_from_arr(0) == 0);
+        assert(BMTB_first_row_indices_ptr->read_integer_from_arr(BMTB_first_row_indices_ptr->get_len() - 1) == row_num);
+        assert(BMTB_first_nz_indices_ptr->read_integer_from_arr(0) == 0);
+        assert(BMTB_first_nz_indices_ptr->read_integer_from_arr(BMTB_first_nz_indices_ptr->get_len() - 1) == nz_row_indices_ptr->get_len());
+        assert(BMTB_first_row_indices_ptr->get_len() == BMTB_first_nz_indices_ptr->get_len());
+    }
+
+    // 记录读入的数据
+    shared_ptr<data_item_record> parent_first_row_indices_record(new data_item_record(TBLOCK_META, "first_row_indices", this->target_matrix_id));
+    this->source_data_item_ptr_vec.push_back(parent_first_row_indices_record);
+    // shared_ptr<data_item_record> parent_first_nz_indices_record(new data_item_record(TBLOCK_META, "first_nz_indices", this->target_matrix_id));
+    // this->source_data_item_ptr_vec.push_back(parent_first_nz_indices_record);
+
+    // 用一个数组存储所有的BMW的非零元相对偏移
+    vector<unsigned long> BMW_nz_offset;
+
+    // 遍历所有的父块，父块数量为父块的行索引与非零元索引长度-1
+    for (unsigned int parent_blk = 0; parent_blk < BMTB_first_row_indices_ptr->get_len() - 1; parent_blk++)
+    {
+        // 获取当前快的行号和非零元索引
+        unsigned long first_row_index_of_this_BMTB = BMTB_first_row_indices_ptr->read_integer_from_arr(parent_blk);
+        unsigned long first_row_index_of_next_BMTB = BMTB_first_row_indices_ptr->read_integer_from_arr(parent_blk + 1);
+        unsigned long first_nz_index_of_this_BMTB = 0;
+        unsigned long first_nz_index_of_next_BMTB = 0;
+        if (check)
+        {
+            first_nz_index_of_this_BMTB = BMTB_first_nz_indices_ptr->read_integer_from_arr(parent_blk);
+            first_nz_index_of_next_BMTB = BMTB_first_nz_indices_ptr->read_integer_from_arr(parent_blk + 1);
+        }
+
+        if (check)
+        {
+            assert(first_row_index_of_this_BMTB < first_row_index_of_next_BMTB);
+        }
+
+        // 当前父块的第一个BMW相对nz偏移是从0开始的
+        BMW_nz_offset.push_back(0);
+
+        // 遍历当前父块的所有行
+        for (unsigned int row_of_parent_blk = first_row_index_of_this_BMTB; row_of_parent_blk < first_row_index_of_next_BMTB; row_of_parent_blk++)
+        {
+            // 当前行的非零元数量
+            if (check)
+            {
+                assert(row_of_parent_blk < row_num);
+            }
+            long row_length = nnz_of_each_row[row_of_parent_blk];
+
+            long remain_row_nz_num = row_length;
+
+            // 一直减到没
+            while (remain_row_nz_num > 0)
+            {
+                long added_nz_num = this->fixed_col_block_size;
+
+                // 如果要加上的偏移量比剩余的行非零元数量还大，那就按照剩余的行非零元数量来算
+                if (added_nz_num > remain_row_nz_num)
+                {
+                    added_nz_num = remain_row_nz_num;
+                }
+
+                // 增加一个偏移量
+                BMW_nz_offset.push_back(BMW_nz_offset[BMW_nz_offset.size() - 1] + added_nz_num);
+
+                remain_row_nz_num = remain_row_nz_num - added_nz_num;
+            }
+            if (check)
+            {
+                assert(remain_row_nz_num == 0);
+            }
+        }
+        if (check)
+        {
+            // 最后一个BMW的相对偏移加上当前父块的绝对nz偏移量是下一个父块的nz偏移
+            assert(first_nz_index_of_this_BMTB + BMW_nz_offset[BMW_nz_offset.size() - 1] == first_nz_index_of_next_BMTB);
+        }
+
+        // 最后一个元素删掉，相对偏移没有CSR-like的尾巴，如果父块中是空的，那就没有BMW的相对索引被插入
+        unsigned long cur_BMW_num = BMW_nz_offset.size();
+        BMW_nz_offset.pop_back();
+        // 检查一下是不是删了
+        if (check)
+        {
+            assert(BMW_nz_offset.size() == cur_BMW_num - 1);
+        }
+    }
+
+    if (check)
+    {
+        assert(!this->meta_data_set_ptr->is_exist(WARP_META, "first_nz_indices_relative_to_BMTB", this->target_matrix_id));
+    }
+
+    // 创建一个新的通用数组
+    shared_ptr<universal_array> first_nz_indices_relative_to_BMTB_ptr(new universal_array(&(BMW_nz_offset[0]), BMW_nz_offset.size(), UNSIGNED_LONG));
+    shared_ptr<meta_data_item> first_nz_indices_relative_to_BMTB_item(new meta_data_item(first_nz_indices_relative_to_BMTB_ptr, WARP_META, "first_nz_indices_relative_to_BMTB", this->target_matrix_id));
+    // 将内容放到metadata set中
+    this->meta_data_set_ptr->add_element(first_nz_indices_relative_to_BMTB_item);
+
+    // 增加一个输出的记录
+    shared_ptr<data_item_record> first_nz_indices_relative_to_BMTB_record(new data_item_record(WARP_META, "first_nz_indices_relative_to_BMTB", this->target_matrix_id));
+    this->dest_data_item_ptr_vec.push_back(first_nz_indices_relative_to_BMTB_record);
+
+    // 执行完毕
+    this->is_run = true;
+}
+
+vector<shared_ptr<data_item_record>> get_begin_nzs_of_BMW_after_fixed_blocking_in_col_direction_relative_to_BMTB::get_source_data_item_ptr_in_data_transform_step()
+{
+    assert(this->target_matrix_id >= 0);
+    assert(this->fixed_col_block_size > 0);
+    assert(this->is_run == true);
+
+    // 检查空指针
+    for (unsigned long i = 0; i < this->source_data_item_ptr_vec.size(); i++)
+    {
+        assert(this->source_data_item_ptr_vec[i] != NULL);
+    }
+
+    return this->source_data_item_ptr_vec;
+}
+
+vector<shared_ptr<data_item_record>> get_begin_nzs_of_BMW_after_fixed_blocking_in_col_direction_relative_to_BMTB::get_dest_data_item_ptr_in_data_transform_step_without_check()
+{
+    assert(this->target_matrix_id >= 0);
+    assert(this->fixed_col_block_size > 0);
+    assert(this->is_run == true);
+
+    // 检查空指针
+    for (unsigned long i = 0; i < this->dest_data_item_ptr_vec.size(); i++)
+    {
+        assert(this->dest_data_item_ptr_vec[i] != NULL);
+    }
+
+    return this->dest_data_item_ptr_vec;
+}
+
+string get_begin_nzs_of_BMW_after_fixed_blocking_in_col_direction_relative_to_BMTB::convert_to_string()
+{
+    assert(this->target_matrix_id >= 0);
+    assert(this->fixed_col_block_size > 0);
+
+    string return_str = "get_begin_nzs_of_BMW_after_fixed_blocking_in_col_direction_relative_to_BMTB::{name:\"" + name + "\",target_matrix_id:" + to_string(target_matrix_id) + ",col_size:" + to_string(this->fixed_col_block_size) + "}";
+
+    return return_str;
+}
