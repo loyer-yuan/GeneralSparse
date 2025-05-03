@@ -1,0 +1,9 @@
+[submodule "baseline/base_aspt/aspt"]
+	path = baseline/base_aspt/aspt
+	url = https://github.com/LucasWilkinson/ASpT-mirror.git
+[submodule "baseline/base_sputnik/sputnik"]
+	path = baseline/base_sputnik/sputnik
+	url = https://github.com/google-research/sputnik
+[submodule "baseline/baseline_dgsparse/dgsparse"]
+	path = baseline/baseline_dgsparse/dgsparse
+	url = https://github.com/dgSPARSE/dgSPARSE-Lib

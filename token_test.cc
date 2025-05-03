@@ -1084,7 +1084,7 @@ float test_spmm_thread_total(shared_ptr<meta_data_set>  meta_dataset_ptr, string
     float gflops = 0;
     execute_binary(execute_path, matrix_name, time, gflops);
     cout << matrix_name << " " << gflops << endl;
-    ofstream out("/home/wangyaoyu/spmm_build/test_spmm_thread_total_" + get_config()["DENSE_MATRIX_SIZE"].as_string() + ".log", ios::app);
+    ofstream out("/home/wangyaoyu/GeneralSparse/test_spmm_thread_total_" + get_config()["DENSE_MATRIX_SIZE"].as_string() + ".log", ios::app);
     out << matrix_name<< " " << gflops << endl;
 
     // system(("rm -rf " + get_config()["ROOT_PATH_STR"].as_string() + "/data_source/" + to_string(output_id)).c_str());
@@ -1172,7 +1172,7 @@ float test_spmm_thread_total(shared_ptr<meta_data_set>  meta_dataset_ptr, string
 //     float gflops = 0;
 //     execute_binary(execute_path, matrix_name, time, gflops);
 //     cout << matrix_name << " " << gflops << endl;
-//     ofstream out("/home/wangyaoyu/spmm_build/test_spmm_thread_total_" + get_config()["DENSE_MATRIX_SIZE"].as_string() + ".log", ios::app);
+//     ofstream out("/home/wangyaoyu/GeneralSparse/test_spmm_thread_total_" + get_config()["DENSE_MATRIX_SIZE"].as_string() + ".log", ios::app);
 //     out << matrix_name<< " " << gflops << endl;
 
 //     // system(("rm -rf " + get_config()["ROOT_PATH_STR"].as_string() + "/data_source/" + to_string(output_id)).c_str());
@@ -1240,7 +1240,7 @@ float test_spmm_warp_total(shared_ptr<meta_data_set> meta_dataset_ptr, string ma
     float gflops = 0;
     execute_binary(execute_path, matrix_name, time, gflops);
     cout << matrix_name << " " << gflops << endl;
-    ofstream out("/home/wangyaoyu/spmm_build/test_spmm_warp_total_" + get_config()["DENSE_MATRIX_SIZE"].as_string() + ".log", ios::app);
+    ofstream out("/home/wangyaoyu/GeneralSparse/test_spmm_warp_total_" + get_config()["DENSE_MATRIX_SIZE"].as_string() + ".log", ios::app);
     out << matrix_name<< " " << gflops << endl;
 
     // system(("rm -rf " + get_config()["ROOT_PATH_STR"].as_string() + "/data_source/" + to_string(output_id)).c_str());
@@ -1306,7 +1306,7 @@ float test_spmm_warp_bitmap(shared_ptr<meta_data_set> meta_dataset_ptr, string m
     float gflops = 0;
     execute_binary(execute_path, matrix_name, time, gflops);
     cout << matrix_name << " " << gflops << endl;
-    ofstream out("/home/wangyaoyu/spmm_build/test_spmm_warp_bitmap_" + get_config()["DENSE_MATRIX_SIZE"].as_string() + ".log", ios::app);
+    ofstream out("/home/wangyaoyu/GeneralSparse/test_spmm_warp_bitmap_" + get_config()["DENSE_MATRIX_SIZE"].as_string() + ".log", ios::app);
     out << matrix_name<< " " << gflops << endl;
 
     // system(("rm -rf " + get_config()["ROOT_PATH_STR"].as_string() + "/data_source/" + to_string(output_id)).c_str());
@@ -1382,7 +1382,7 @@ float test_spmm_thread_bit_map(shared_ptr<meta_data_set> meta_dataset_ptr, strin
     float gflops = 0;
     execute_binary(execute_path, matrix_name, time, gflops);
     cout << matrix_name << " " << gflops << endl;
-    ofstream out("/home/wangyaoyu/spmm_build/test_spmm_thread_bit_map_" + get_config()["DENSE_MATRIX_SIZE"].as_string() + ".log", ios::app);
+    ofstream out("/home/wangyaoyu/GeneralSparse/test_spmm_thread_bit_map_" + get_config()["DENSE_MATRIX_SIZE"].as_string() + ".log", ios::app);
     out << matrix_name<< " " << gflops << endl;
 
     // system(("rm -rf " + get_config()["ROOT_PATH_STR"].as_string() + "/data_source/" + to_string(output_id)).c_str());
@@ -1446,7 +1446,7 @@ float test_spmm_warp_segment(shared_ptr<meta_data_set> meta_dataset_ptr, string 
     float gflops = 0;
     execute_binary(execute_path, matrix_name, time, gflops);
     cout << matrix_name << " " << gflops << endl;
-    ofstream out("/home/wangyaoyu/spmm_build/test_spmm_warp_segment_" + get_config()["DENSE_MATRIX_SIZE"].as_string() + ".log", ios::app);
+    ofstream out("/home/wangyaoyu/GeneralSparse/test_spmm_warp_segment_" + get_config()["DENSE_MATRIX_SIZE"].as_string() + ".log", ios::app);
     out << matrix_name<< " " << gflops << endl;
 
     // system(("rm -rf " + get_config()["ROOT_PATH_STR"].as_string() + "/data_source/" + to_string(output_id)).c_str());
@@ -1505,7 +1505,7 @@ float test_spmm_block_total(shared_ptr<meta_data_set> meta_dataset_ptr, string m
     float gflops = 0;
     execute_binary(execute_path, matrix_name, time, gflops);
     cout << matrix_name << " " << gflops << endl;
-    ofstream out("/home/wangyaoyu/spmm_build/test_spmm_block_total_" + get_config()["DENSE_MATRIX_SIZE"].as_string() + ".log", ios::app);
+    ofstream out("/home/wangyaoyu/GeneralSparse/test_spmm_block_total_" + get_config()["DENSE_MATRIX_SIZE"].as_string() + ".log", ios::app);
     out << matrix_name<< " " << gflops << endl;
 
     // system(("rm -rf " + get_config()["ROOT_PATH_STR"].as_string() + "/data_source/" + to_string(output_id)).c_str());
@@ -1573,7 +1573,7 @@ float test_spmm_block_bitmap(shared_ptr<meta_data_set> meta_dataset_ptr, string 
     float gflops = 0;
     execute_binary(execute_path, matrix_name, time, gflops);
     cout << matrix_name << " " << gflops << endl;
-    ofstream out("/home/wangyaoyu/spmm_build/test_spmm_block_bitmap_" + get_config()["DENSE_MATRIX_SIZE"].as_string() + ".log", ios::app);
+    ofstream out("/home/wangyaoyu/GeneralSparse/test_spmm_block_bitmap_" + get_config()["DENSE_MATRIX_SIZE"].as_string() + ".log", ios::app);
     out << matrix_name<< " " << gflops << endl;
 
     // system(("rm -rf " + get_config()["ROOT_PATH_STR"].as_string() + "/data_source/" + to_string(output_id)).c_str());
