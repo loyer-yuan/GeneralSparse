@@ -1,3 +1,6 @@
 *.o
 data_source/
+
 token_test
+
+global_config.json
