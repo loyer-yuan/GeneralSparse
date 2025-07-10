@@ -42,7 +42,7 @@ void test_var_name_token()
     assert(var_name_token_ptr->static_check() == true);
 
     shared_ptr<basic_token> var_name_token_ptr2(new var_name_token(".1", CONSTANT_VAR_TYPE));
-    
+
     assert(var_name_token_ptr2->static_check() == false);
 
     shared_ptr<basic_token> var_name_token_ptr3(new var_name_token(".1", GLOBAL_MEM_VAR_TYPE));
@@ -52,7 +52,7 @@ void test_var_name_token()
     shared_ptr<basic_token> var_name_token_ptr4(new var_name_token("asd_a", GLOBAL_MEM_VAR_TYPE));
 
     cout << var_name_token_ptr4->run() << endl;
-    
+
     assert(var_name_token_ptr4->static_check() == true);
 
     shared_ptr<basic_token> var_name_token_ptr5(new var_name_token("1as", GLOBAL_MEM_VAR_TYPE));
@@ -65,7 +65,7 @@ void test_arr_access_token()
     print_red_str_to_term("test_arr_access_token");
     shared_ptr<var_name_token> dest_var_token_ptr(new var_name_token("dest_var", REGISTER_VAR_TYPE));
     shared_ptr<var_name_token> dest_var_token_ptr2(new var_name_token("dest_var", GLOBAL_MEM_VAR_TYPE));
-    
+
     shared_ptr<var_name_token> mem_ptr_name_token_ptr(new var_name_token("mem_ptr_name", REGISTER_VAR_TYPE));
     shared_ptr<var_name_token> mem_ptr_name_token_ptr2(new var_name_token("mem_ptr_name", GLOBAL_MEM_VAR_TYPE));
 
@@ -156,7 +156,7 @@ void test_shared_mem_write_token()
     // 内存索引的变量
     shared_ptr<var_name_token> input_index(new var_name_token("123", CONSTANT_VAR_TYPE));
     shared_ptr<var_name_token> input_index2(new var_name_token("asd", GLOBAL_MEM_VAR_TYPE));
-    
+
     // 写入数据的变量
     shared_ptr<var_name_token> written_value(new var_name_token("123", CONSTANT_VAR_TYPE));
     shared_ptr<var_name_token> written_value2(new var_name_token("asd", GLOBAL_MEM_VAR_TYPE));
@@ -167,7 +167,7 @@ void test_shared_mem_write_token()
 
     shared_ptr<shared_mem_write_token> shared_mem_write_token_ptr2(new shared_mem_write_token(shared_mem_name2, input_index, written_value));
     assert(shared_mem_write_token_ptr2->static_check() == false);
-    
+
     shared_ptr<shared_mem_write_token> shared_mem_write_token_ptr3(new shared_mem_write_token(shared_mem_name, input_index2, written_value));
     assert(shared_mem_write_token_ptr3->static_check() == false);
 
@@ -220,12 +220,12 @@ void test_for_token()
     // 创造一个metadata get
     shared_ptr<metadata_get_basic_token> metadata_get_code(new metadata_get_basic_token(TBLOCK_META));
     shared_ptr<metadata_get_basic_token> metadata_get_code2(new metadata_get_basic_token(WARP_META));
-    
+
     // 创造迭代变量的类型
     shared_ptr<data_type_token> loop_var_name_type(new data_type_token(UNSIGNED_INT, false));
     shared_ptr<data_type_token> loop_var_name_type2(new data_type_token(UNSIGNED_INT, true));
     shared_ptr<data_type_token> loop_var_name_type3(new data_type_token(DOUBLE, false));
-    
+
     // 创造迭代变量
     shared_ptr<var_name_token> loop_var_name(new var_name_token("id", REGISTER_VAR_TYPE));
     shared_ptr<var_name_token> loop_var_name2(new var_name_token("12", CONSTANT_VAR_TYPE));
@@ -241,7 +241,7 @@ void test_for_token()
     // 创造步长变量
     shared_ptr<var_name_token> step_loop_var_name1(new var_name_token("12", CONSTANT_VAR_TYPE));
     shared_ptr<var_name_token> step_loop_var_name2(new var_name_token("abc", GLOBAL_MEM_VAR_TYPE));
-    
+
     // 创造真正的for循环
     shared_ptr<for_token> loop(new for_token(loop_var_name_type, loop_var_name, begin_loop_var_name1, end_loop_var_name1, step_loop_var_name1, TBLOCK_META, metadata_get_code, NULL, NULL, NULL));
     assert(loop->static_check() == true);
@@ -309,7 +309,7 @@ void test_shared_mem_broadcast_token()
     shared_ptr<shared_mem_broadcast_token> shared_mem_broadcast_token_ptr(new shared_mem_broadcast_token(data_type_of_read_data_vec, global_mem_read_arr_vec, global_mem_read_index_vec, dest_variable_vec));
     assert(shared_mem_broadcast_token_ptr->static_check() == true);
     cout << shared_mem_broadcast_token_ptr->run() << endl;
-    
+
     // 变量类型加入一个指针，肯定过不去
     shared_ptr<data_type_token> data_type_of_read_data3(new data_type_token(UNSIGNED_LONG, true));
     vector<shared_ptr<data_type_token>> data_type_of_read_data_vec2;
@@ -342,7 +342,7 @@ void test_shared_mem_broadcast_token()
     vector<shared_ptr<var_name_token>> dest_variable_vec2;
     dest_variable_vec2.push_back(dest_variable);
     dest_variable_vec2.push_back(dest_variable3);
-    
+
     shared_ptr<shared_mem_broadcast_token> shared_mem_broadcast_token_ptr5(new shared_mem_broadcast_token(data_type_of_read_data_vec, global_mem_read_arr_vec, global_mem_read_index_vec, dest_variable_vec2));
     assert(shared_mem_broadcast_token_ptr5->static_check() == false);
 }
@@ -360,7 +360,7 @@ void test_var_assign_token()
 
     // 创建一个算式类型的右操作数
     shared_ptr<math_expr_token> right_operand3(new math_expr_token("a+b"));
-    
+
     // 创建合法的赋值语句
     shared_ptr<var_assign_token> var_assign1(new var_assign_token(left_operand1, right_operand1));
     assert(var_assign1->static_check() == true);
@@ -384,7 +384,7 @@ void test_metadata_set_get_token()
     shared_ptr<data_type_token> data_type_token_ptr(new data_type_token(UNSIGNED_LONG, false));
     shared_ptr<var_name_token> init_var_name_ptr(new var_name_token("init_var_name", REGISTER_VAR_TYPE));
     shared_ptr<var_init_token> var_init_type_token_ptr(new var_init_token(data_type_token_ptr, init_var_name_ptr, NULL));
-    
+
     // 一个共享内存广播
     // 创建一个数据类型
     shared_ptr<data_type_token> data_type_of_read_data(new data_type_token(UNSIGNED_LONG, false));
@@ -420,13 +420,13 @@ void test_metadata_set_get_token()
 
     // 创建一个算式类型的右操作数
     shared_ptr<math_expr_token> right_operand3(new math_expr_token("a+b"));
-    
+
     // 创建合法的赋值语句
     shared_ptr<var_assign_token> var_assign1(new var_assign_token(left_operand1, right_operand3));
 
     // 一个全局内存访问
     shared_ptr<var_name_token> dest_var_token_ptr(new var_name_token("dest_var", REGISTER_VAR_TYPE));
-    
+
     shared_ptr<var_name_token> mem_ptr_name_token_ptr2(new var_name_token("mem_ptr_name", GLOBAL_MEM_VAR_TYPE));
 
     shared_ptr<var_name_token> mem_index_token_ptr(new var_name_token("mem_index", REGISTER_VAR_TYPE));
@@ -444,7 +444,7 @@ void test_metadata_set_get_token()
 
     assert(metadata_set_get_token_ptr->static_check() == true);
     cout << metadata_set_get_token_ptr->run() << endl;
-    
+
     // 不合法的WARP级别的元数据获取
     shared_ptr<metadata_set_get_token> metadata_set_get_token_ptr2(new metadata_set_get_token(WARP_META));
 
@@ -461,7 +461,7 @@ void test_var_of_metadata_from_spec_paral()
     print_red_str_to_term("test_var_of_metadata_from_spec_paral");
     // 创造一个表达式
     shared_ptr<math_expr_token> idx_expr(new math_expr_token("a+b"));
-    
+
     cout << var_of_metadata_from_spec_paral(TBLOCK_META, "metadata", 1, idx_expr) << endl;
 }
 
@@ -532,7 +532,7 @@ void test_format_output_of_code_generator()
     assert(file_is_exist(get_config()["ROOT_PATH_STR"].as_string() + "/data_source/" + to_string(output_id) + "/" + get_metadata_item_name(GLOBAL_META, "nz_col_indices", 2)));
     assert(file_is_exist(get_config()["ROOT_PATH_STR"].as_string() + "/data_source/" + to_string(output_id) + "/" + get_metadata_item_name(GLOBAL_META, "nz_vals", 2)));
     assert(file_is_exist(get_config()["ROOT_PATH_STR"].as_string() + "/data_source/" + to_string(output_id) + "/" + get_metadata_item_name(TBLOCK_META, "first_row_indices", 2)));
-    
+
     // 移除文件
     // system(("rm -rf " + get_config()["ROOT_PATH_STR"].as_string() + "/data_source/" + to_string(output_id)).c_str());
 }
@@ -632,7 +632,7 @@ void test_code_generator_thread_grid_info_get_in_the_beginning_of_kernel()
     cout << code_generator_ptr->thread_id_in_warp_code() << endl;
     cout << code_generator_ptr->warp_num_in_thread_block_code() << endl;
     cout << code_generator_ptr->thread_num_in_thread_block_code() << endl;
-    
+
     // 创建format文件
     unsigned long output_id = code_generator_ptr->write_matrix_format_to_disk();
 
@@ -722,7 +722,7 @@ void test_fused_metadata_get_token()
 
     // 创建一个代码生成器
     shared_ptr<code_generator> code_generator_ptr(new code_generator(meta_dataset_ptr, 2));
-    
+
     shared_ptr<math_expr_token> mem_access_index1(new math_expr_token("0"));
     shared_ptr<math_expr_token> mem_access_index2(new math_expr_token("1"));
 
@@ -780,7 +780,7 @@ void test_outest_for_token_of_BMBT()
     assert(logical_check(meta_dataset_ptr) == true);
 
     shared_ptr<code_generator> code_generator_ptr(new code_generator(meta_dataset_ptr, 2));
-    
+
     // 加入tblock级别的并行
     code_generator_ptr->open_spec_level_of_paral(TBLOCK_META);
 
@@ -942,7 +942,7 @@ void test_inner_loop_for_token()
     shared_ptr<for_token> for_token_ptr = code_generator_ptr->generate_for_token_of_spec_paral_level(WARP_META, NULL, false);
 
     cout << for_token_ptr->run() << endl;
-    
+
     // 获取TBLOCK级别元数据获取的代码
     shared_ptr<metadata_set_get_token> metadata_token_ptr = code_generator_ptr->generate_token_of_fused_metadata_get_in_spec_paral_level(TBLOCK_META);
 
@@ -1003,7 +1003,7 @@ void test_shared_memory_array_declaration()
 float test_spmm_thread_total(shared_ptr<meta_data_set>  meta_dataset_ptr, string matrix_name, int sparse_coarsen_factor, int coarsen_factor)
 {
     print_red_str_to_term("test_spmm_thread_total");
-    
+
     shared_ptr<code_generator> code_generator_ptr(new code_generator(meta_dataset_ptr, 0));
 
     shared_ptr<operator_executer> operator_executer_ptr(new operator_executer());
@@ -1038,7 +1038,7 @@ float test_spmm_thread_total(shared_ptr<meta_data_set>  meta_dataset_ptr, string
     }
 
 
-    
+
     int x_size;
     if ((int)get_config()["DENSE_MATRIX_SIZE"].as_float() / coarsen_factor < 32)
     {
@@ -1059,18 +1059,18 @@ float test_spmm_thread_total(shared_ptr<meta_data_set>  meta_dataset_ptr, string
     // 执行完之后Metadata set中的内容是合法的
     assert(meta_dataset_ptr->check());
     assert(logical_check(meta_dataset_ptr) == true);
-    
+
     // 创建一个reduction token
     shared_ptr<thread_total_reduce_operator> thread_reduce_operator_ptr(new thread_total_reduce_operator(code_generator_ptr, false, sparse_coarsen_factor, coarsen_factor, operator_executer_ptr->get_operator_context()));
     operator_executer_ptr->add_and_run(thread_reduce_operator_ptr);
 
-    
+
     vector<unsigned int> block;
 
 
     block.push_back(x_size);
     block.push_back(y_size);
- 
+
     unsigned int grid_x = meta_dataset_ptr->get_element(GLOBAL_META, "origin_row_num", -1)->get_metadata_arr()->read_integer_from_arr(0) / y_size + 1;
 
     shared_ptr<grid_block_operator> grid_block_operator_ptr(new grid_block_operator(code_generator_ptr, grid_x, block, coarsen_factor, operator_executer_ptr->get_operator_context()));
@@ -1097,7 +1097,7 @@ float test_spmm_thread_total(shared_ptr<meta_data_set>  meta_dataset_ptr, string
 // float test_spmm_thread_total_with_col_div(shared_ptr<meta_data_set>  meta_dataset_ptr,string matrix_name, int sparse_coarsen_factor, int coarsen_factor)
 // {
 //     print_red_str_to_term("test_spmm_thread_total");
-    
+
 //     shared_ptr<code_generator> code_generator_ptr(new code_generator(meta_dataset_ptr, 0));
 
 //     shared_ptr<operator_executer> operator_executer_ptr(new operator_executer());
@@ -1134,15 +1134,15 @@ float test_spmm_thread_total(shared_ptr<meta_data_set>  meta_dataset_ptr, string
 //     // 执行完之后Metadata set中的内容是合法的
 //     assert(meta_dataset_ptr->check());
 //     assert(logical_check(meta_dataset_ptr) == true);
-    
+
 //     // 创建一个reduction token
 //     shared_ptr<thread_total_reduce_operator> thread_reduce_operator_ptr(new thread_total_reduce_operator(code_generator_ptr, false, 1 , 1, operator_executer_ptr->get_operator_context()));
 //     operator_executer_ptr->add_and_run(thread_reduce_operator_ptr);
 
-    
+
 //     vector<unsigned int> block;
 
-    
+
 //     int x_size;
 //     if ((int)get_config()["DENSE_MATRIX_SIZE"].as_float() < 32)
 //     {
@@ -1188,7 +1188,7 @@ float test_spmm_thread_total(shared_ptr<meta_data_set>  meta_dataset_ptr, string
 float test_spmm_warp_total(shared_ptr<meta_data_set> meta_dataset_ptr, string matrix_name, int sparse_coarsen_factor, int coarsen_factor)
 {
     print_red_str_to_term("test_spmm_warp_total");
-    
+
     shared_ptr<code_generator> code_generator_ptr(new code_generator(meta_dataset_ptr, 0));
 
     shared_ptr<operator_executer> operator_executer_ptr(new operator_executer());
@@ -1253,7 +1253,7 @@ float test_spmm_warp_total(shared_ptr<meta_data_set> meta_dataset_ptr, string ma
 float test_spmm_warp_bitmap(shared_ptr<meta_data_set> meta_dataset_ptr, string matrix_name, int sparse_coarsen_factor, int coarsen_factor)
 {
     print_red_str_to_term("test_spmm_warp_bitmap");
-    
+
     shared_ptr<code_generator> code_generator_ptr(new code_generator(meta_dataset_ptr, 0));
 
     shared_ptr<operator_executer> operator_executer_ptr(new operator_executer());
@@ -1276,7 +1276,7 @@ float test_spmm_warp_bitmap(shared_ptr<meta_data_set> meta_dataset_ptr, string m
     // 执行完之后Metadata set中的内容是合法的
     assert(meta_dataset_ptr->check());
     assert(logical_check(meta_dataset_ptr) == true);
-    
+
     unsigned int grid_x = meta_dataset_ptr->get_element(GLOBAL_META, "origin_row_num", -1)->get_metadata_arr()->read_integer_from_arr(0);
     int y_size = min((int)get_config()["DENSE_MATRIX_SIZE"].as_float() / coarsen_factor, 32);
     int x_size = max(128 / y_size, 32);
@@ -1319,7 +1319,7 @@ float test_spmm_warp_bitmap(shared_ptr<meta_data_set> meta_dataset_ptr, string m
 float test_spmm_thread_bit_map(shared_ptr<meta_data_set> meta_dataset_ptr, string matrix_name, int sparse_coarsen_factor, int coarsen_factor)
 {
     print_red_str_to_term("test_spmm_thread_bit_map");
-    
+
     shared_ptr<code_generator> code_generator_ptr(new code_generator(meta_dataset_ptr, 0));
 
     shared_ptr<operator_executer> operator_executer_ptr(new operator_executer());
@@ -1393,7 +1393,7 @@ float test_spmm_thread_bit_map(shared_ptr<meta_data_set> meta_dataset_ptr, strin
 float test_spmm_warp_segment(shared_ptr<meta_data_set> meta_dataset_ptr, string matrix_name, int sparse_coarsen_factor, int coarsen_factor)
 {
     print_red_str_to_term("test_spmm_warp_segment");
-    
+
 
     shared_ptr<code_generator> code_generator_ptr(new code_generator(meta_dataset_ptr, 0));
 
@@ -1416,7 +1416,7 @@ float test_spmm_warp_segment(shared_ptr<meta_data_set> meta_dataset_ptr, string 
     // 执行完之后Metadata set中的内容是合法的
     assert(meta_dataset_ptr->check());
     assert(logical_check(meta_dataset_ptr) == true);
-    
+
 
     unsigned int grid_x = meta_dataset_ptr->get_element(GLOBAL_META, "origin_nnz_num", -1)->get_metadata_arr()->read_integer_from_arr(0) / 128 + 1;
     vector<unsigned int> block;
@@ -1458,7 +1458,7 @@ float test_spmm_warp_segment(shared_ptr<meta_data_set> meta_dataset_ptr, string 
 float test_spmm_block_total(shared_ptr<meta_data_set> meta_dataset_ptr, string matrix_name, int sparse_coarsen_factor, int coarsen_factor)
 {
     print_red_str_to_term("test_spmm_block_total");
-    
+
     shared_ptr<code_generator> code_generator_ptr(new code_generator(meta_dataset_ptr, 0));
 
     shared_ptr<operator_executer> operator_executer_ptr(new operator_executer());
@@ -1479,7 +1479,7 @@ float test_spmm_block_total(shared_ptr<meta_data_set> meta_dataset_ptr, string m
     // 执行完之后Metadata set中的内容是合法的
     assert(meta_dataset_ptr->check());
     assert(logical_check(meta_dataset_ptr) == true);
-    
+
 
     unsigned int grid_x = meta_dataset_ptr->get_element(GLOBAL_META, "origin_row_num", -1)->get_metadata_arr()->read_integer_from_arr(0);
     vector<unsigned int> block;
@@ -1518,7 +1518,7 @@ float test_spmm_block_total(shared_ptr<meta_data_set> meta_dataset_ptr, string m
 float test_spmm_block_bitmap(shared_ptr<meta_data_set> meta_dataset_ptr, string matrix_name, int sparse_coarsen_factor, int coarsen_factor)
 {
     print_red_str_to_term("test_spmm_block_bitmap");
-    
+
     shared_ptr<code_generator> code_generator_ptr(new code_generator(meta_dataset_ptr, 0));
 
     shared_ptr<operator_executer> operator_executer_ptr(new operator_executer());
@@ -1558,7 +1558,7 @@ float test_spmm_block_bitmap(shared_ptr<meta_data_set> meta_dataset_ptr, string 
 
     shared_ptr<grid_block_operator> grid_block_operator_ptr(new grid_block_operator(code_generator_ptr, grid_x, block, coarsen_factor, operator_executer_ptr->get_operator_context()));
     operator_executer_ptr->add_and_run(grid_block_operator_ptr);
-   
+
     shared_ptr<tblock_thread_bit_map_operator> block_reduce_operator_ptr(new tblock_thread_bit_map_operator(code_generator_ptr, coarsen_factor, block[1], false, false, operator_executer_ptr->get_operator_context()));
     operator_executer_ptr->add_and_run(block_reduce_operator_ptr);
 
@@ -1631,26 +1631,27 @@ int main(int argc, char ** argv)
     float time = 0;
     float min_time = 999999;
 
-    shared_ptr<meta_data_set> meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-    time = test_spmm_warp_bitmap(meta_dataset_ptr, matrix_name, 4, 1);
-    if (time < min_time)
-    {
-        min_time = time;
-    }
+    shared_ptr<meta_data_set> meta_dataset_ptr;
+    // shared_ptr<meta_data_set> meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    // time = test_spmm_warp_bitmap(meta_dataset_ptr, matrix_name, 4, 1);
+    // if (time < min_time)
+    // {
+    //     min_time = time;
+    // }
 
-    meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-    time = test_spmm_block_total(meta_dataset_ptr, matrix_name, 1, 1);
-    if (time < min_time)
-    {
-        min_time = time;
-    }
+    // meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    // time = test_spmm_block_total(meta_dataset_ptr, matrix_name, 1, 1);
+    // if (time < min_time)
+    // {
+    //     min_time = time;
+    // }
 
-    meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-    time = test_spmm_block_bitmap(meta_dataset_ptr, matrix_name, 4, 1);
-    if (time < min_time)
-    {
-        min_time = time;
-    }
+    // meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    // time = test_spmm_block_bitmap(meta_dataset_ptr, matrix_name, 4, 1);
+    // if (time < min_time)
+    // {
+    //     min_time = time;
+    // }
 
     meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
     time = test_spmm_thread_total(meta_dataset_ptr, matrix_name, 4, 1);
@@ -1659,186 +1660,186 @@ int main(int argc, char ** argv)
         min_time = time;
     }
 
-    meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-    time = test_spmm_thread_bit_map(meta_dataset_ptr, matrix_name, 4, 1);
-    if (time < min_time)
-    {
-        min_time = time;
-    }
+    // meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    // time = test_spmm_thread_bit_map(meta_dataset_ptr, matrix_name, 4, 1);
+    // if (time < min_time)
+    // {
+    //     min_time = time;
+    // }
 
-    meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-    time = test_spmm_warp_bitmap(meta_dataset_ptr, matrix_name, 4, 2);
-    if (time < min_time)
-    {
-        min_time = time;
-    }
+    // meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    // time = test_spmm_warp_bitmap(meta_dataset_ptr, matrix_name, 4, 2);
+    // if (time < min_time)
+    // {
+    //     min_time = time;
+    // }
 
-    meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-    time = test_spmm_block_bitmap(meta_dataset_ptr, matrix_name, 4, 2);
-    if (time < min_time)
-    {
-        min_time = time;
-    }
+    // meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    // time = test_spmm_block_bitmap(meta_dataset_ptr, matrix_name, 4, 2);
+    // if (time < min_time)
+    // {
+    //     min_time = time;
+    // }
 
-    meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-    time = test_spmm_thread_total(meta_dataset_ptr, matrix_name, 4, 2);
-    if (time < min_time)
-    {
-        min_time = time;
-    }
+    // meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    // time = test_spmm_thread_total(meta_dataset_ptr, matrix_name, 4, 2);
+    // if (time < min_time)
+    // {
+    //     min_time = time;
+    // }
 
-    meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-    time = test_spmm_thread_bit_map(meta_dataset_ptr, matrix_name, 4, 2);
-    if (time < min_time)
-    {
-        min_time = time;
-    }
+    // meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    // time = test_spmm_thread_bit_map(meta_dataset_ptr, matrix_name, 4, 2);
+    // if (time < min_time)
+    // {
+    //     min_time = time;
+    // }
 
-    meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-    time = test_spmm_block_total(meta_dataset_ptr, matrix_name, 1, 4);
-    if (time < min_time)
-    {
-        min_time = time;
-    }
+    // meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    // time = test_spmm_block_total(meta_dataset_ptr, matrix_name, 1, 4);
+    // if (time < min_time)
+    // {
+    //     min_time = time;
+    // }
 
-    meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-    time = test_spmm_block_total(meta_dataset_ptr, matrix_name, 1, 2);
-    if (time < min_time)
-    {
-        min_time = time;
-    }
+    // meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    // time = test_spmm_block_total(meta_dataset_ptr, matrix_name, 1, 2);
+    // if (time < min_time)
+    // {
+    //     min_time = time;
+    // }
 
-    meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-    time = test_spmm_warp_total(meta_dataset_ptr, matrix_name, 1, 1);
-    if (time < min_time)
-    {
-        min_time = time;
-    }
+    // meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    // time = test_spmm_warp_total(meta_dataset_ptr, matrix_name, 1, 1);
+    // if (time < min_time)
+    // {
+    //     min_time = time;
+    // }
 
-   
-    // 将global_config 文件中HALF置为false, 保持PRECISE_OF_FLOAT为float即可测试float
-    if (get_config()["HALF"].as_bool() == true)
-    {
 
-        meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-        time = test_spmm_thread_bit_map(meta_dataset_ptr, matrix_name, 8, 2);
-        if (time < min_time)
-        {
-            min_time = time;
-        }
+    // // 将global_config 文件中HALF置为false, 保持PRECISE_OF_FLOAT为float即可测试float
+    // if (get_config()["HALF"].as_bool() == true)
+    // {
 
-        meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-        time = test_spmm_thread_total(meta_dataset_ptr, matrix_name, 8, 2);
-        if (time < min_time)
-        {
-            min_time = time;
-        }
+    //     meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    //     time = test_spmm_thread_bit_map(meta_dataset_ptr, matrix_name, 8, 2);
+    //     if (time < min_time)
+    //     {
+    //         min_time = time;
+    //     }
 
-        meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-        time = test_spmm_warp_bitmap(meta_dataset_ptr, matrix_name, 8, 2);
-        if (time < min_time)
-        {
-            min_time = time;
-        }
+    //     meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    //     time = test_spmm_thread_total(meta_dataset_ptr, matrix_name, 8, 2);
+    //     if (time < min_time)
+    //     {
+    //         min_time = time;
+    //     }
 
-        meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-        time = test_spmm_block_bitmap(meta_dataset_ptr, matrix_name, 8, 2);
-        if (time < min_time)
-        {
-            min_time = time;
-        }
+    //     meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    //     time = test_spmm_warp_bitmap(meta_dataset_ptr, matrix_name, 8, 2);
+    //     if (time < min_time)
+    //     {
+    //         min_time = time;
+    //     }
 
-        meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-        time = test_spmm_warp_segment(meta_dataset_ptr, matrix_name, 4, 2);
-        if (time < min_time)
-        {
-            min_time = time;
-        }
+    //     meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    //     time = test_spmm_block_bitmap(meta_dataset_ptr, matrix_name, 8, 2);
+    //     if (time < min_time)
+    //     {
+    //         min_time = time;
+    //     }
 
-        meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-        time = test_spmm_thread_total(meta_dataset_ptr, matrix_name, 8, 4);
-        if (time < min_time)
-        {
-            min_time = time;
-        }
+    //     meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    //     time = test_spmm_warp_segment(meta_dataset_ptr, matrix_name, 4, 2);
+    //     if (time < min_time)
+    //     {
+    //         min_time = time;
+    //     }
 
-        meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-        time = test_spmm_thread_bit_map(meta_dataset_ptr, matrix_name, 8, 4);
-        if (time < min_time)
-        {
-            min_time = time;
-        }
+    //     meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    //     time = test_spmm_thread_total(meta_dataset_ptr, matrix_name, 8, 4);
+    //     if (time < min_time)
+    //     {
+    //         min_time = time;
+    //     }
 
-        meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-        time = test_spmm_warp_bitmap(meta_dataset_ptr, matrix_name, 8, 4);
-        if (time < min_time)
-        {
-            min_time = time;
-        }
+    //     meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    //     time = test_spmm_thread_bit_map(meta_dataset_ptr, matrix_name, 8, 4);
+    //     if (time < min_time)
+    //     {
+    //         min_time = time;
+    //     }
 
-        meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-        time = test_spmm_warp_segment(meta_dataset_ptr, matrix_name, 8, 4);
-        if (time < min_time)
-        {
-            min_time = time;
-        }
+    //     meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    //     time = test_spmm_warp_bitmap(meta_dataset_ptr, matrix_name, 8, 4);
+    //     if (time < min_time)
+    //     {
+    //         min_time = time;
+    //     }
 
-        meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-        time = test_spmm_thread_total(meta_dataset_ptr, matrix_name, 4, 8);
-        if (time < min_time)
-        {
-            min_time = time;
-        }
+    //     meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    //     time = test_spmm_warp_segment(meta_dataset_ptr, matrix_name, 8, 4);
+    //     if (time < min_time)
+    //     {
+    //         min_time = time;
+    //     }
 
-        meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-        time = test_spmm_thread_bit_map(meta_dataset_ptr, matrix_name, 4, 8);
-        if (time < min_time)
-        {
-            min_time = time;
-        }
+    //     meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    //     time = test_spmm_thread_total(meta_dataset_ptr, matrix_name, 4, 8);
+    //     if (time < min_time)
+    //     {
+    //         min_time = time;
+    //     }
 
-        meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-        time = test_spmm_warp_bitmap(meta_dataset_ptr, matrix_name, 4, 8);
-        if (time < min_time)
-        {
-            min_time = time;
-        }
+    //     meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    //     time = test_spmm_thread_bit_map(meta_dataset_ptr, matrix_name, 4, 8);
+    //     if (time < min_time)
+    //     {
+    //         min_time = time;
+    //     }
 
-        meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-        time = test_spmm_warp_segment(meta_dataset_ptr, matrix_name, 4, 8);
-        if (time < min_time)
-        {
-            min_time = time;
-        }
+    //     meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    //     time = test_spmm_warp_bitmap(meta_dataset_ptr, matrix_name, 4, 8);
+    //     if (time < min_time)
+    //     {
+    //         min_time = time;
+    //     }
 
-        meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-        time = test_spmm_thread_total(meta_dataset_ptr, matrix_name, 8, 8);
-        if (time < min_time)
-        {
-            min_time = time;
-        }
+    //     meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    //     time = test_spmm_warp_segment(meta_dataset_ptr, matrix_name, 4, 8);
+    //     if (time < min_time)
+    //     {
+    //         min_time = time;
+    //     }
 
-        meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-        time = test_spmm_thread_bit_map(meta_dataset_ptr, matrix_name, 8, 8);
-        if (time < min_time)
-        {
-            min_time = time;
-        }
+    //     meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    //     time = test_spmm_thread_total(meta_dataset_ptr, matrix_name, 8, 8);
+    //     if (time < min_time)
+    //     {
+    //         min_time = time;
+    //     }
 
-        meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-        time = test_spmm_warp_bitmap(meta_dataset_ptr, matrix_name, 8, 8);
-        if (time < min_time)
-        {
-            min_time = time;
-        }
+    //     meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    //     time = test_spmm_thread_bit_map(meta_dataset_ptr, matrix_name, 8, 8);
+    //     if (time < min_time)
+    //     {
+    //         min_time = time;
+    //     }
 
-        meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
-        time = test_spmm_warp_segment(meta_dataset_ptr, matrix_name, 8, 8);
-        if (time < min_time)
-        {
-            min_time = time;
-        }
-    }
+    //     meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    //     time = test_spmm_warp_bitmap(meta_dataset_ptr, matrix_name, 8, 8);
+    //     if (time < min_time)
+    //     {
+    //         min_time = time;
+    //     }
+
+    //     meta_dataset_ptr = create_init_metadata_set_from_file(get_config()["DATA_SET"].as_string() + matrix_name + "", "");
+    //     time = test_spmm_warp_segment(meta_dataset_ptr, matrix_name, 8, 8);
+    //     if (time < min_time)
+    //     {
+    //         min_time = time;
+    //     }
+    // }
 
     cout << matrix_name << " : " << "min time: " << min_time << endl;
 

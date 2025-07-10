@@ -857,7 +857,7 @@ string code_of_data_type(data_type type)
     else if (type == INT2)
     {
         return "int2";
-    }    
+    }
     else if (type == INT4)
     {
         return "int4";
@@ -1359,7 +1359,7 @@ string code_of_main_function(code_builder_t *code_builder, unsigned long kernal_
         return_str = return_str + "BFS_elementwise(device_y_arr, d_reduce, mask, " + to_string(code_builder->op_manager->matrix->dense_row_number) + ");\n";
         return_str = return_str + "\ncudaDeviceSynchronize();\n";
         return_str = return_str + "cudaMemcpy(reduce, d_reduce, sizeof(float), cudaMemcpyDeviceToHost);\n";
-        return_str = return_str + "count++;\n"; 
+        return_str = return_str + "count++;\n";
         return_str = return_str + "if(* reduce == 0) break;\n";
         return_str = return_str + "cudaMemcpy(device_x_arr, device_y_arr, sizeof(" + code_of_data_type(code_builder->op_manager->matrix->val_data_type) + ") * " + to_string(code_builder->op_manager->matrix->dense_col_number) + ", cudaMemcpyDeviceToDevice);\n\n";
     }
@@ -1368,7 +1368,7 @@ string code_of_main_function(code_builder_t *code_builder, unsigned long kernal_
         return_str = return_str + "CC_elementwise(device_y_arr, device_x_arr, d_min_parent, d_parent_temp, d_parent, d_grandparent_temp, d_diff, d_reduce, " + to_string(code_builder->op_manager->matrix->dense_row_number) + ");\n";
         return_str = return_str + "\ncudaDeviceSynchronize();\n";
         return_str = return_str + "cudaMemcpy(reduce, d_reduce, sizeof(float), cudaMemcpyDeviceToHost);\n";
-        return_str = return_str + "count++;\n"; 
+        return_str = return_str + "count++;\n";
         return_str = return_str + "if(* reduce == 0) break;\n";
         return_str = return_str + "cudaMemcpy(d_grandparent_temp, device_x_arr, sizeof(" + code_of_data_type(code_builder->op_manager->matrix->val_data_type) + ") * " + to_string(code_builder->op_manager->matrix->dense_col_number) + ", cudaMemcpyDeviceToDevice);\n\n";
 
@@ -1378,7 +1378,7 @@ string code_of_main_function(code_builder_t *code_builder, unsigned long kernal_
         return_str = return_str + "PR_elementwise(device_y_arr, device_x_arr, d_p, d_r, d_reduce, " + to_string(code_builder->op_manager->matrix->dense_row_number) + ");\n";
         return_str = return_str + "\ncudaDeviceSynchronize();\n";
         return_str = return_str + "cudaMemcpy(reduce, d_reduce, sizeof(float), cudaMemcpyDeviceToHost);\n";
-        return_str = return_str + "count++;\n"; 
+        return_str = return_str + "count++;\n";
         return_str = return_str + "if(sqrt(* reduce) <= 1e-8) break;\n";
         return_str = return_str + "cudaMemcpy(device_x_arr, d_p, sizeof(" + code_of_data_type(code_builder->op_manager->matrix->val_data_type) + ") * " + to_string(code_builder->op_manager->matrix->dense_col_number) + ", cudaMemcpyDeviceToDevice);\n\n";
     }
@@ -1426,7 +1426,7 @@ string code_of_main_function(code_builder_t *code_builder, unsigned long kernal_
     else
     {
         return_str = return_str + "resultWrite << timeuse /1000.0 << endl << gflops << endl;\n";
-    }    
+    }
     return_str = return_str + "resultWrite.close();\n";
 
     return_str = return_str + "\nreturn 0;\n}\n";
@@ -1596,23 +1596,23 @@ string code_of_main_function(code_builder_t *code_builder, vector<int> sub_matri
     {
         return_str = return_str + "\ncudaDeviceSynchronize();\n";
     }
-    
+
 
     if (get_config()["PERFORMANCE_FLAG"].as_string() == "graph" && get_config()["Graph_Algorithm"].as_string() == "BFS")
     {
         return_str = return_str + "BFS_elementwise(device_y_arr, d_reduce, mask, " + to_string(code_builder->op_manager->matrix->dense_row_number) + ");\n";
         return_str = return_str + "\ncudaDeviceSynchronize();\n";
         return_str = return_str + "cudaMemcpy(reduce, d_reduce, sizeof(float), cudaMemcpyDeviceToHost);\n";
-        return_str = return_str + "count++;\n"; 
+        return_str = return_str + "count++;\n";
         return_str = return_str + "if(*reduce == 0) break;\n";
         return_str = return_str + "cudaMemcpy(device_x_arr, device_y_arr, sizeof(" + code_of_data_type(code_builder->op_manager->matrix->val_data_type) + ") * " + to_string(code_builder->op_manager->matrix->dense_col_number) + ", cudaMemcpyDeviceToDevice);\n\n";
     }
     else if (get_config()["PERFORMANCE_FLAG"].as_string() == "graph" && get_config()["Graph_Algorithm"].as_string() == "CC")
     {
         return_str = return_str + "CC_elementwise(device_y_arr, device_x_arr, d_min_parent, d_parent_temp, d_parent, d_grandparent_temp, d_diff, d_reduce, " + to_string(code_builder->op_manager->matrix->dense_row_number) + ");\n";
-        return_str = return_str + "\ncudaDeviceSynchronize();\n";    
+        return_str = return_str + "\ncudaDeviceSynchronize();\n";
         return_str = return_str + "cudaMemcpy(reduce, d_reduce, sizeof(float), cudaMemcpyDeviceToHost);\n";
-        return_str = return_str + "count++;\n"; 
+        return_str = return_str + "count++;\n";
         return_str = return_str + "if(* reduce == 0) break;\n";
         return_str = return_str + "cudaMemcpy(d_grandparent_temp, device_x_arr, sizeof(" + code_of_data_type(code_builder->op_manager->matrix->val_data_type) + ") * " + to_string(code_builder->op_manager->matrix->dense_col_number) + ", cudaMemcpyDeviceToDevice);\n\n";
 
@@ -1622,7 +1622,7 @@ string code_of_main_function(code_builder_t *code_builder, vector<int> sub_matri
         return_str = return_str + "PR_elementwise(device_y_arr, device_x_arr, d_p, d_r, d_reduce, " + to_string(code_builder->op_manager->matrix->dense_row_number) + ");\n";
         return_str = return_str + "\ncudaDeviceSynchronize();\n";
         return_str = return_str + "cudaMemcpy(reduce, d_reduce, sizeof(float), cudaMemcpyDeviceToHost);\n";
-        return_str = return_str + "count++;\n"; 
+        return_str = return_str + "count++;\n";
         return_str = return_str + "if(sqrt(* reduce) <= 1e-8) break;\n";
         return_str = return_str + "cudaMemcpy(device_x_arr, d_p, sizeof(" + code_of_data_type(code_builder->op_manager->matrix->val_data_type) + ") * " + to_string(code_builder->op_manager->matrix->dense_col_number) + ", cudaMemcpyDeviceToDevice);\n\n";
     }
@@ -1767,329 +1767,6 @@ string build_main_file(code_builder_t *builder, vector<int> sub_matrix_id_vec, u
 
     return return_str;
 }
-
-// 传入要处理的稀疏矩阵在磁盘中的位置
-// string code_of_main_function(code_builder_t *code_builder, string matrix_file_name)
-// {
-//     assert(code_builder != NULL);
-
-//     sparse_struct_t *matrix = code_builder->op_manager->matrix;
-
-//     assert(matrix != NULL);
-
-//     string return_str = "int main\n{\n";
-
-//     return_str = return_str + "all_compressed_block_t *total_matrix = read_matrix_from_file(\"" + matrix_file_name + "\");\n";
-
-//     return_str = return_str + "compressed_matrix_content_t *compressed_block = total_matrix->all_compressed_matrix_info;\n";
-
-//     if (matrix->is_sorted == true)
-//     {
-//         assert(matrix->sorted_row_index != NULL);
-//         return_str = return_str + code_line_of_pointer_define(matrix->data_type_of_sorted_row_index, "device_" + code_of_arr_var_name(-1, -1, "sorted_row_index"));
-//     }
-
-//     // return_str = return_str + "unsigned int *device_sorted_row_index;\n";
-
-//     return_str = return_str + "\n";
-//     // 遍历所有的密集子块，对所有显存上的指针进行声明
-//     for (unsigned long index_of_dense_block = 0; index_of_dense_block < matrix->block_coor_table.item_arr.size(); index_of_dense_block++)
-//     {
-//         compressed_block_t *compressed_block_view = matrix->block_coor_table.item_arr[index_of_dense_block]->compressed_block_ptr;
-
-//         assert(compressed_block_view != NULL && compressed_block_view->staggered_padding_val_arr != NULL);
-//         // 值数组的声明
-//         return_str = return_str + code_line_of_pointer_define(compressed_block_view->val_data_type, "device_" + code_of_arr_var_name(index_of_dense_block, -1, "staggered_padding_val_arr"));
-
-//         return_str = return_str + "\n";
-
-//         // 遍历读索引
-//         for (unsigned long index_of_read_index = 0; index_of_read_index < compressed_block_view->read_index.size(); index_of_read_index++)
-//         {
-//             index_of_compress_block_t *read_index = compressed_block_view->read_index[index_of_read_index];
-
-//             if (read_index->index_arr != NULL)
-//             {
-//                 return_str = return_str + code_line_of_pointer_define(read_index->index_data_type, "device_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "index_arr"));
-//             }
-
-//             if (read_index->index_of_the_first_row_arr != NULL)
-//             {
-//                 assert(index_of_read_index == 2 || index_of_read_index == 3 || index_of_read_index == 4);
-//                 return_str = return_str + code_line_of_pointer_define(read_index->data_type_of_index_of_the_first_row_arr, "device_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "index_of_the_first_row_arr"));
-//             }
-
-//             if (read_index->row_number_of_block_arr != NULL)
-//             {
-//                 assert(index_of_read_index == 2 || index_of_read_index == 3);
-//                 return_str = return_str + code_line_of_pointer_define(read_index->data_type_of_row_number_of_block_arr, "device_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "row_number_of_block_arr"));
-//             }
-
-//             if (read_index->tmp_result_write_index_arr != NULL)
-//             {
-//                 assert(index_of_read_index == 3);
-//                 return_str = return_str + code_line_of_pointer_define(read_index->data_type_of_tmp_result_write_index_arr, "device_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "tmp_result_write_index_arr"));
-//             }
-
-//             if (read_index->coo_begin_index_arr != NULL)
-//             {
-//                 assert(index_of_read_index == 2 || index_of_read_index == 3);
-//                 return_str = return_str + code_line_of_pointer_define(read_index->data_type_of_coo_begin_index_arr, "device_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "coo_begin_index_arr"));
-//             }
-
-//             if (read_index->coo_block_size_arr != NULL)
-//             {
-//                 assert(index_of_read_index == 3 || index_of_read_index == 4);
-//                 return_str = return_str + code_line_of_pointer_define(read_index->data_type_of_coo_block_size_arr, "device_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "coo_block_size_arr"));
-//             }
-
-//             if (read_index->child_tmp_row_csr_index_arr != NULL)
-//             {
-//                 assert(index_of_read_index == 2 || index_of_read_index == 3);
-//                 return_str = return_str + code_line_of_pointer_define(read_index->data_type_of_child_tmp_row_csr_index, "device_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "child_tmp_row_csr_index_arr"));
-//             }
-
-//             if (read_index->begin_index_in_tmp_row_csr_arr_of_block != NULL)
-//             {
-//                 assert(index_of_read_index == 2 || index_of_read_index == 3);
-//                 return_str = return_str + code_line_of_pointer_define(read_index->data_type_of_begin_index_in_tmp_row_csr_arr_of_block, "device_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "begin_index_in_tmp_row_csr_arr_of_block"));
-//             }
-
-//             return_str = return_str + "\n";
-//         }
-
-//         for (unsigned long index_of_y_write_index = 0; index_of_y_write_index < compressed_block_view->y_write_index.size(); index_of_y_write_index++)
-//         {
-//             index_of_compress_block_t *y_write_index = compressed_block_view->y_write_index[index_of_y_write_index];
-//             assert(y_write_index != NULL);
-//             if (y_write_index->index_arr != NULL)
-//             {
-//                 return_str = return_str + code_line_of_pointer_define(y_write_index->index_data_type, "device_" + code_of_y_write_arr_var_name(index_of_dense_block, index_of_y_write_index, "index_arr"));
-//             }
-
-//             return_str = return_str + "\n";
-//         }
-
-//         return_str = return_str + "\n";
-//     }
-
-//     // 多层循环，执行申请显存的代码，和上面的循环结构一样，
-//     if (matrix->is_sorted == true)
-//     {
-//         assert(matrix->sorted_row_index != NULL);
-//         return_str = return_str + code_line_of_cuda_malloc(matrix->data_type_of_sorted_row_index, "total_matrix->size_of_" + code_of_arr_var_name(-1, -1, "sorted_row_index"), "device_" + code_of_arr_var_name(-1, -1, "sorted_row_index"));
-//     }
-
-//     for (unsigned long index_of_dense_block = 0; index_of_dense_block < matrix->block_coor_table.item_arr.size(); index_of_dense_block++)
-//     {
-//         compressed_block_t *compressed_block_view = matrix->block_coor_table.item_arr[index_of_dense_block]->compressed_block_ptr;
-
-//         assert(compressed_block_view != NULL && compressed_block_view->staggered_padding_val_arr != NULL);
-//         // 值数组的声明
-//         return_str = return_str + code_line_of_cuda_malloc(compressed_block_view->val_data_type, "compressed_block->size_of_" + code_of_arr_var_name(index_of_dense_block, -1, "staggered_padding_val_arr"), "device_" + code_of_arr_var_name(index_of_dense_block, -1, "staggered_padding_val_arr"));
-
-//         return_str = return_str + "\n";
-
-//         // 遍历读索引
-//         for (unsigned long index_of_read_index = 0; index_of_read_index < compressed_block_view->read_index.size(); index_of_read_index++)
-//         {
-//             index_of_compress_block_t *read_index = compressed_block_view->read_index[index_of_read_index];
-
-//             if (read_index->index_arr != NULL)
-//             {
-//                 return_str = return_str + code_line_of_cuda_malloc(read_index->index_data_type, "compressed_block->size_of_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "index_arr"), "device_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "index_arr"));
-//             }
-
-//             if (read_index->index_of_the_first_row_arr != NULL)
-//             {
-//                 assert(index_of_read_index == 2 || index_of_read_index == 3 || index_of_read_index == 4);
-//                 return_str = return_str + code_line_of_cuda_malloc(read_index->data_type_of_index_of_the_first_row_arr, "compressed_block->size_of_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "index_of_the_first_row_arr"), "device_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "index_of_the_first_row_arr"));
-//             }
-
-//             if (read_index->row_number_of_block_arr != NULL)
-//             {
-//                 assert(index_of_read_index == 2 || index_of_read_index == 3);
-//                 return_str = return_str + code_line_of_cuda_malloc(read_index->data_type_of_row_number_of_block_arr, "compressed_block->size_of_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "row_number_of_block_arr"), "device_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "row_number_of_block_arr"));
-//             }
-
-//             if (read_index->tmp_result_write_index_arr != NULL)
-//             {
-//                 assert(index_of_read_index == 3);
-//                 return_str = return_str + code_line_of_cuda_malloc(read_index->data_type_of_tmp_result_write_index_arr, "compressed_block->size_of_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "tmp_result_write_index_arr"), "device_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "tmp_result_write_index_arr"));
-//             }
-
-//             if (read_index->coo_begin_index_arr != NULL)
-//             {
-//                 assert(index_of_read_index == 2 || index_of_read_index == 3);
-//                 return_str = return_str + code_line_of_cuda_malloc(read_index->data_type_of_coo_begin_index_arr, "compressed_block->size_of_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "coo_begin_index_arr"), "device_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "coo_begin_index_arr"));
-//             }
-
-//             if (read_index->coo_block_size_arr != NULL)
-//             {
-//                 assert(index_of_read_index == 3 || index_of_read_index == 4);
-//                 return_str = return_str + code_line_of_cuda_malloc(read_index->data_type_of_coo_block_size_arr, "compressed_block->size_of_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "coo_block_size_arr"), "device_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "coo_block_size_arr"));
-//             }
-
-//             if (read_index->child_tmp_row_csr_index_arr != NULL)
-//             {
-//                 assert(index_of_read_index == 2 || index_of_read_index == 3);
-//                 return_str = return_str + code_line_of_cuda_malloc(read_index->data_type_of_child_tmp_row_csr_index, "compressed_block->size_of_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "child_tmp_row_csr_index_arr"), "device_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "child_tmp_row_csr_index_arr"));
-//             }
-
-//             if (read_index->begin_index_in_tmp_row_csr_arr_of_block != NULL)
-//             {
-//                 assert(index_of_read_index == 2 || index_of_read_index == 3);
-//                 return_str = return_str + code_line_of_cuda_malloc(read_index->data_type_of_begin_index_in_tmp_row_csr_arr_of_block, "compressed_block->size_of_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "begin_index_in_tmp_row_csr_arr_of_block"), "device_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "begin_index_in_tmp_row_csr_arr_of_block"));
-//             }
-
-//             return_str = return_str + "\n";
-//         }
-
-//         for (unsigned long index_of_y_write_index = 0; index_of_y_write_index < compressed_block_view->y_write_index.size(); index_of_y_write_index++)
-//         {
-//             index_of_compress_block_t *y_write_index = compressed_block_view->y_write_index[index_of_y_write_index];
-//             assert(y_write_index != NULL);
-//             if (y_write_index->index_arr != NULL)
-//             {
-//                 return_str = return_str + code_line_of_cuda_malloc(y_write_index->index_data_type, "compressed_block->size_of_" + code_of_y_write_arr_var_name(index_of_dense_block, index_of_y_write_index, "index_arr"), "device_" + code_of_y_write_arr_var_name(index_of_dense_block, index_of_y_write_index, "index_arr"));
-//             }
-
-//             return_str = return_str + "\n";
-//         }
-
-//         return_str = return_str + "\n";
-//     }
-
-//     // 将所有内存拷贝到显存中
-//     if (matrix->is_sorted == true)
-//     {
-//         assert(matrix->sorted_row_index != NULL);
-//         return_str = return_str + code_line_of_cuda_memcpy("device_" + code_of_arr_var_name(-1, -1, "sorted_row_index"), "total_matrix->" + code_of_arr_var_name(-1, -1, "sorted_row_index"), matrix->data_type_of_sorted_row_index, "total_matrix->size_of_" + code_of_arr_var_name(-1, -1, "sorted_row_index"), "cudaMemcpyHostToDevice");
-//     }
-
-//     // 遍历所有密集矩阵视图
-//     for (unsigned long index_of_dense_block = 0; index_of_dense_block < matrix->block_coor_table.item_arr.size(); index_of_dense_block++)
-//     {
-//         compressed_block_t *compressed_block_view = matrix->block_coor_table.item_arr[index_of_dense_block]->compressed_block_ptr;
-
-//         assert(compressed_block_view != NULL && compressed_block_view->staggered_padding_val_arr != NULL);
-//         // 值数组的声明
-//         return_str = return_str + code_line_of_cuda_memcpy("device_" + code_of_arr_var_name(index_of_dense_block, -1, "staggered_padding_val_arr"), "compressed_block->" + code_of_arr_var_name(index_of_dense_block, -1, "staggered_padding_val_arr"), compressed_block_view->val_data_type, "compressed_block->size_of_" + code_of_arr_var_name(index_of_dense_block, -1, "staggered_padding_val_arr"), "cudaMemcpyHostToDevice");
-
-//         return_str = return_str + "\n";
-
-//         // 遍历读索引
-//         for (unsigned long index_of_read_index = 0; index_of_read_index < compressed_block_view->read_index.size(); index_of_read_index++)
-//         {
-//             index_of_compress_block_t *read_index = compressed_block_view->read_index[index_of_read_index];
-
-//             if (read_index->index_arr != NULL)
-//             {
-//                 return_str = return_str + code_line_of_cuda_memcpy("device_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "index_arr"), "compressed_block->" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "index_arr"), read_index->index_data_type, "compressed_block->size_of_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "index_arr"), "cudaMemcpyHostToDevice");
-//             }
-
-//             if (read_index->index_of_the_first_row_arr != NULL)
-//             {
-//                 assert(index_of_read_index == 2 || index_of_read_index == 3 || index_of_read_index == 4);
-//                 return_str = return_str + code_line_of_cuda_memcpy("device_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "index_of_the_first_row_arr"), "compressed_block->" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "index_of_the_first_row_arr"), read_index->data_type_of_index_of_the_first_row_arr, "compressed_block->size_of_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "index_of_the_first_row_arr"), "cudaMemcpyHostToDevice");
-//             }
-
-//             if (read_index->row_number_of_block_arr != NULL)
-//             {
-//                 assert(index_of_read_index == 2 || index_of_read_index == 3);
-//                 return_str = return_str + code_line_of_cuda_memcpy("device_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "row_number_of_block_arr"), "compressed_block->" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "row_number_of_block_arr"), read_index->data_type_of_row_number_of_block_arr, "compressed_block->size_of_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "row_number_of_block_arr"), "cudaMemcpyHostToDevice");
-//             }
-
-//             if (read_index->tmp_result_write_index_arr != NULL)
-//             {
-//                 assert(index_of_read_index == 3);
-//                 return_str = return_str + code_line_of_cuda_memcpy("device_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "tmp_result_write_index_arr"), "compressed_block->" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "tmp_result_write_index_arr"), read_index->data_type_of_tmp_result_write_index_arr, "compressed_block->size_of_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "tmp_result_write_index_arr"), "cudaMemcpyHostToDevice");
-//             }
-
-//             if (read_index->coo_begin_index_arr != NULL)
-//             {
-//                 assert(index_of_read_index == 2 || index_of_read_index == 3);
-//                 return_str = return_str + code_line_of_cuda_memcpy("device_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "coo_begin_index_arr"), "compressed_block->" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "coo_begin_index_arr"), read_index->data_type_of_coo_begin_index_arr, "compressed_block->size_of_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "coo_begin_index_arr"), "cudaMemcpyHostToDevice");
-//             }
-
-//             if (read_index->coo_block_size_arr != NULL)
-//             {
-//                 assert(index_of_read_index == 3 || index_of_read_index == 4);
-//                 return_str = return_str + code_line_of_cuda_memcpy("device_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "coo_block_size_arr"), "compressed_block->" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "coo_block_size_arr"), read_index->data_type_of_coo_block_size_arr, "compressed_block->size_of_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "coo_block_size_arr"), "cudaMemcpyHostToDevice");
-//             }
-
-//             if (read_index->child_tmp_row_csr_index_arr != NULL)
-//             {
-//                 assert(index_of_read_index == 2 || index_of_read_index == 3);
-//                 return_str = return_str + code_line_of_cuda_memcpy("device_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "child_tmp_row_csr_index_arr"), "compressed_block->" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "child_tmp_row_csr_index_arr"), read_index->data_type_of_child_tmp_row_csr_index, "compressed_block->size_of_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "child_tmp_row_csr_index_arr"), "cudaMemcpyHostToDevice");
-//             }
-
-//             if (read_index->begin_index_in_tmp_row_csr_arr_of_block != NULL)
-//             {
-//                 assert(index_of_read_index == 2 || index_of_read_index == 3);
-//                 return_str = return_str + code_line_of_cuda_memcpy("device_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "begin_index_in_tmp_row_csr_arr_of_block"), "compressed_block->" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "begin_index_in_tmp_row_csr_arr_of_block"), read_index->data_type_of_begin_index_in_tmp_row_csr_arr_of_block, "compressed_block->size_of_" + code_of_arr_var_name(index_of_dense_block, index_of_read_index, "begin_index_in_tmp_row_csr_arr_of_block"), "cudaMemcpyHostToDevice");
-//             }
-
-//             return_str = return_str + "\n";
-//         }
-
-//         for (unsigned long index_of_y_write_index = 0; index_of_y_write_index < compressed_block_view->y_write_index.size(); index_of_y_write_index++)
-//         {
-//             index_of_compress_block_t *y_write_index = compressed_block_view->y_write_index[index_of_y_write_index];
-//             assert(y_write_index != NULL);
-//             if (y_write_index->index_arr != NULL)
-//             {
-//                 return_str = return_str + code_line_of_cuda_memcpy("device_" + code_of_y_write_arr_var_name(index_of_dense_block, index_of_y_write_index, "index_arr"), "compressed_block->" + code_of_y_write_arr_var_name(index_of_dense_block, index_of_y_write_index, "index_arr"), y_write_index->index_data_type, "compressed_block->size_of_" + code_of_y_write_arr_var_name(index_of_dense_block, index_of_y_write_index, "index_arr"), "cudaMemcpyHostToDevice");
-//             }
-
-//             return_str = return_str + "\n";
-//         }
-
-//         return_str = return_str + "\n";
-//     }
-
-//     // double *host_y_arr = (double *)malloc(sizeof(double) * 929901);
-//     // // bool*
-//     // double *host_x_arr = (double *)malloc(sizeof(double) * 303645);
-//     // 用自己的x数组，先申请两个主机数组
-//     return_str = return_str + code_of_data_type(matrix->val_data_type) + "* host_y_arr = (" + code_of_data_type(matrix->val_data_type) + " *)malloc(sizeof(" + code_of_data_type(matrix->val_data_type) + ") *" + to_string(matrix->dense_row_number) + ");\n";
-//     return_str = return_str + code_of_data_type(matrix->val_data_type) + "* host_x_arr = (" + code_of_data_type(matrix->val_data_type) + " *)malloc(sizeof(" + code_of_data_type(matrix->val_data_type) + ") *" + to_string(matrix->dense_col_number) + ");\n";
-
-//     // 两个主机数组
-//     return_str = return_str + "for (unsigned long i = 0; i < " + to_string(matrix->dense_row_number) + "; i++)\n{\nhost_y_arr[i] = 0;\n}\n";
-//     return_str = return_str + "for (unsigned long i = 0; i < " + to_string(matrix->dense_col_number) + "; i++)\n{\nhost_x_arr[i] = 100;\n}\n";
-
-//     // 两个设备数组
-//     return_str = return_str + "double *device_y_arr = NULL;\ndouble *device_x_arr = NULL;\n";
-
-//     return_str = return_str + code_line_of_cuda_malloc(matrix->val_data_type, to_string(matrix->dense_row_number), code_of_arr_var_name(-1, -1, "device_y_arr"));
-//     return_str = return_str + code_line_of_cuda_malloc(matrix->val_data_type, to_string(matrix->dense_col_number), code_of_arr_var_name(-1, -1, "device_x_arr"));
-
-//     return_str = return_str + "\n";
-//     // 数组的拷贝
-//     return_str = return_str + code_line_of_cuda_memcpy("device_y_arr", "host_y_arr", matrix->val_data_type, to_string(matrix->dense_row_number), "cudaMemcpyHostToDevice");
-//     return_str = return_str + code_line_of_cuda_memcpy("device_x_arr", "host_x_arr", matrix->val_data_type, to_string(matrix->dense_col_number), "cudaMemcpyHostToDevice");
-
-//     // 声明并初始化所有的流
-//     return_str = return_str + "cudaStream_t stream_arr[" + to_string(matrix->block_coor_table.item_arr.size()) + "]\n";
-//     return_str = return_str + "for(unsigned long i = 0; i < " + to_string(matrix->block_coor_table.item_arr.size()) + "; i++)\n{\ncudaStreamCreate(&(stream_arr[i]));\n}\n";
-
-//     // 遍历所有密集子块，调用不同的核函数
-//     for (unsigned long index_of_dense_block = 0; index_of_dense_block < matrix->block_coor_table.item_arr.size(); index_of_dense_block++)
-//     {
-//         return_str = return_str + code_of_kernal_func_call(code_builder, index_of_dense_block);
-//     }
-
-//     // 同步函数
-//     return_str = return_str + "cudaDeviceSynchronize();\n";
-
-//     // 将数据拷贝回来的代码
-//     return_str = return_str + code_line_of_cuda_memcpy("host_y_arr", "device_y_arr", matrix->val_data_type, to_string(matrix->dense_row_number), "cudaMemcpyDeviceToHost");
-
-//     return_str = return_str + "\n}\n";
-
-//     return return_str;
-// }
 
 string code_line_of_pointer_define(data_type type, string var_name)
 {

@@ -60,7 +60,7 @@ void get_matrix_index_and_val_from_file(string coo_file_name, vector<unsigned lo
     {
         graph_flag = true;
     }
-    
+
     bool cc_flag = false;
     if (get_config()["Graph_Algorithm"].as_string() == "CC")
     {
@@ -71,7 +71,7 @@ void get_matrix_index_and_val_from_file(string coo_file_name, vector<unsigned lo
     if (get_config()["Graph_Algorithm"].as_string() == "PR")
     {
         pr_flag = true;
-    }   
+    }
 
 
 
@@ -250,7 +250,7 @@ void get_matrix_index_and_val_from_file(string coo_file_name, vector<unsigned lo
                     last_row = get<0>(cc_vec[i]);
                     last_col = get<1>(cc_vec[i]);
                 }
-            } 
+            }
         }
     }
 
@@ -1000,12 +1000,12 @@ unsigned int byte_num_of_data_type(data_type type)
     {
         return sizeof(short);
     }
-    
+
     if (type == CHAR4)
     {
         return sizeof(int);
     }
-        
+
     if (type == CHAR8)
     {
         return 2 * sizeof(int);
@@ -1219,7 +1219,7 @@ string read_str_from_command_line(int argc,char **argv, int cmd_input_index)
     assert(argv != NULL && *argv != NULL);
 
     const char* str_ptr = argv[cmd_input_index];
-    
+
     return str_ptr;
 }
 
@@ -1425,14 +1425,14 @@ unsigned long read_from_array_with_data_type(void *arr, data_type type, unsigned
 void write_to_array_with_data_type(void *arr, data_type type, unsigned long write_pos, unsigned long write_val)
 {
     assert(type == UNSIGNED_LONG || type == UNSIGNED_INT || type == UNSIGNED_SHORT || type == UNSIGNED_CHAR || type == BOOL);
-    
+
     // 处理bool类型
     if (type == BOOL)
     {
         bool* input_arr = (bool*)arr;
         input_arr[write_pos] = write_val;
     }
-    
+
     if (type == UNSIGNED_LONG)
     {
         unsigned long *input_arr = (unsigned long *)arr;
@@ -1862,7 +1862,7 @@ void delete_arr_with_data_type(void *arr, data_type type)
 {
     // cout << convert_data_type_to_string(type) << endl;
 
-    assert(type == UNSIGNED_CHAR || type == UNSIGNED_INT || type == UNSIGNED_SHORT || type == UNSIGNED_LONG || 
+    assert(type == UNSIGNED_CHAR || type == UNSIGNED_INT || type == UNSIGNED_SHORT || type == UNSIGNED_LONG ||
         type == FLOAT || type == DOUBLE || type == CHAR || type == SHORT || type == INT || type == LONG || type == BOOL);
 
     assert(arr != NULL);
@@ -2023,7 +2023,7 @@ void print_arr_to_file_with_data_type(void *arr, data_type type, unsigned long l
             {
                 output_num = 0.0;
             }
-            
+
             arrWrite << output_num << endl;
         }
     }
@@ -2502,12 +2502,12 @@ unsigned long get_max_of_a_integer_data_type(data_type type)
 
     if (type == LONG_LONG)
     {
-        return LONG_LONG_MAX;
+        return LLONG_MAX;
     }
 
     if (type == UNSIGNED_LONG_LONG)
     {
-        return ULONG_LONG_MAX;
+        return ULLONG_MAX;
     }
 
     assert(false);
@@ -2561,7 +2561,7 @@ unsigned long get_min_of_a_integer_data_type(data_type type)
 
     if (type == LONG_LONG)
     {
-        return LONG_LONG_MIN;
+        return LLONG_MIN;
     }
 
     if (type == UNSIGNED_LONG_LONG)
@@ -2615,7 +2615,7 @@ data_type get_data_type_from_type_info(const type_info& input_info)
     {
         return CHAR;
     }
-    
+
     if (input_info == typeid(unsigned char))
     {
         return UNSIGNED_CHAR;
