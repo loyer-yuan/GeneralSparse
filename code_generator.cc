@@ -291,8 +291,6 @@ string code_generator::generate_matrix_format_read_code()
     // 在CPU端读入数据，指针的名字就是Metadata set中名字
     for (unsigned long i = 0; i < this->pos_of_needed_metadata_vec.size(); i++)
     {
-
-
         POS_TYPE pos_of_needed_index_array = this->pos_of_needed_metadata_vec[i];
         string real_name_of_needed_index_array = this->real_name_of_needed_metadata_vec[i];
         int sub_matrix_id_of_needed_index_array = this->sub_matrix_id_of_needed_metadata_vec[i];
@@ -320,6 +318,8 @@ string code_generator::generate_matrix_format_read_code()
         // }
 
         format_read_code << code_of_data_type(data_type_of_index) << "* ";
+        // TODO
+        assert(get_config()["HALF"].as_bool() == false);
         if (get_config()["HALF"].as_bool() == true && data_type_of_index == FLOAT)
         {
             format_read_code << get_metadata_item_name(pos_of_needed_index_array, real_name_of_needed_index_array, sub_matrix_id_of_needed_index_array) << "_ = ";
@@ -335,6 +335,7 @@ string code_generator::generate_matrix_format_read_code()
         // 然后是对应文件的文件名
         format_read_code << "\"" << format_index_file_prefix << "/" << get_metadata_item_name(pos_of_needed_index_array, real_name_of_needed_index_array, sub_matrix_id_of_needed_index_array) << "\");" << endl;
 
+        /*
         if(get_config()["HALF"].as_bool() == true && data_type_of_index == FLOAT)
         {
             format_read_code << code_of_data_type(HALF) << "* ";
@@ -344,16 +345,18 @@ string code_generator::generate_matrix_format_read_code()
             format_read_code << "__float2half(" << get_metadata_item_name(pos_of_needed_index_array, real_name_of_needed_index_array, sub_matrix_id_of_needed_index_array) << "_[i]);" << endl;
             format_read_code << "}" << endl;
         }
+        */
     }
 
     format_read_code << endl;
 
+    /*
     format_read_code << "cudaSetDevice(" << get_config()["DEFAULT_DEVICE_ID"] << ");" << endl;
+    */
     // 拷贝到指向设备的数组
+    /*
     for (unsigned long i = 0; i < this->pos_of_needed_metadata_vec.size(); i++)
     {
-
-
         POS_TYPE pos_of_needed_index_array = this->pos_of_needed_metadata_vec[i];
         string real_name_of_needed_index_array = this->real_name_of_needed_metadata_vec[i];
         int sub_matrix_id_of_needed_index_array = this->sub_matrix_id_of_needed_metadata_vec[i];
@@ -405,6 +408,7 @@ string code_generator::generate_matrix_format_read_code()
     }
 
     format_read_code << endl;
+    */
 
     // 必然存在值数组
     assert(this->meta_data_set_ptr->is_exist(GLOBAL_META, "nz_vals", this->sub_matrix_id));
@@ -429,10 +433,12 @@ string code_generator::generate_matrix_format_read_code()
     data_type data_type_of_vec = val_arr_of_sub_matrix->get_data_type();
     assert(data_type_of_vec == FLOAT || data_type_of_vec == DOUBLE);
 
+    /*
     if(data_type_of_vec == FLOAT && get_config()["HALF"].as_bool() == true)
     {
         data_type_of_vec = HALF;
     }
+    */
 
     // y向量的大小，需要知道整个矩阵的行数量
     string size_of_y_vec_expr = "sizeof(" + code_of_data_type(data_type_of_vec) + ") * " + to_string(row_num_of_the_whole_matrix) + " * " + to_string(K);
@@ -463,6 +469,7 @@ string code_generator::generate_matrix_format_read_code()
     format_read_code << endl;
 
     // 声明x和y的设备指针
+    /*
     format_read_code << code_of_data_type(data_type_of_vec) << "* "
                      << "d_y_arr;" << endl;
     format_read_code << code_of_data_type(data_type_of_vec) << "* "
@@ -479,6 +486,7 @@ string code_generator::generate_matrix_format_read_code()
     // 拷贝
     format_read_code << "cudaMemcpy(d_y_arr, y_arr, " << size_of_y_vec_expr << ", cudaMemcpyHostToDevice);" << endl;
     format_read_code << "cudaMemcpy(d_x_arr, x_arr, " << size_of_x_vec_expr << ", cudaMemcpyHostToDevice);" << endl;
+    */
 
     return format_read_code.str();
 }
@@ -568,7 +576,7 @@ string code_generator::generate_profiling_code_and_kernel(unsigned int kernel_re
     }
     profiling_kernel_calling_code << "dim3 grid_dim(" << this->thread_block_num[0] << ", " << this->thread_block_num[1] << ");" << endl;
     profiling_kernel_calling_code << "dim3 block_dim(" << this->thread_num[0] << ", " << this->thread_num[1] << ");" << endl;
-    profiling_kernel_calling_code << "unsigned int K = "<< get_config()["DENSE_MATRIX_SIZE"].as_integer() << ";" << endl; 
+    profiling_kernel_calling_code << "unsigned int K = "<< get_config()["DENSE_MATRIX_SIZE"].as_integer() << ";" << endl;
 
 
     profiling_kernel_calling_code << this->generate_kernel_calling_code(1) << endl;
@@ -675,9 +683,9 @@ void code_generator::generate_kernel_file(unsigned int kernel_repeat_number)
     assert(file_is_exist(dir_of_data_source));
 
     // 程序的头文件库必须存在
-    string header_lib_path = get_config()["ROOT_PATH_STR"].as_string() + "/cuda_code/kernel_lib.hpp";
-    // 编译脚本，拷贝到对应目录下cuda_code/make_kernel.sh
-    string compile_script_path = get_config()["ROOT_PATH_STR"].as_string() + "/cuda_code/make_kernel.sh";
+    string header_lib_path = get_config()["ROOT_PATH_STR"].as_string() + "/arm_code/kernel_lib.hpp";
+    // arm_code/make_kernel.sh
+    string compile_script_path = get_config()["ROOT_PATH_STR"].as_string() + "/arm_code/make_kernel.sh";
     assert(file_is_exist(header_lib_path));
 
     // 将头文件拷贝到对应的目录下
@@ -691,13 +699,14 @@ void code_generator::generate_kernel_file(unsigned int kernel_repeat_number)
     file_content << "#include \"kernel_lib.hpp\"" << endl
                  << endl;
 
-    file_content << endl
-                 << this->generate_kernel_declaration_code() << endl;
+    // TODO: Not finish kernel yet.
+    // file_content << endl
+    //              << this->generate_kernel_declaration_code() << endl;
 
     file_content << this->generate_main_function_code(kernel_repeat_number) << endl;
 
     // 用write_string_to_file写文件
-    string kernel_file_path = get_config()["ROOT_PATH_STR"].as_string() + "/data_source/" + to_string(this->output_id) + "/" + "kernel_file.cu";
+    string kernel_file_path = get_config()["ROOT_PATH_STR"].as_string() + "/data_source/" + to_string(this->output_id) + "/" + "kernel_file.cpp";
     write_string_to_file(kernel_file_path, file_content.str());
 }
 
@@ -1285,7 +1294,7 @@ shared_ptr<var_name_token> code_generator::generate_fused_memory_access_with_rel
         real_metadata_name_1 = "first_row_indices_relative_to_BMW";
         real_metadata_name_2 = "first_row_indices_relative_to_BMTB";
     }
-    
+
     POS_TYPE parent_pos;
     bool end_loop = false;
     if (mem_access_index_expr->run().find("+1") != string::npos || mem_access_index_expr->run().find("+ 1") != string::npos)
@@ -1355,7 +1364,7 @@ shared_ptr<var_name_token> code_generator::generate_fused_memory_access(POS_TYPE
     {
         metadata_name = metadata_name + "_without_ending";
     }
-    
+
     // cout << pos << " " << metadata_name << " " << this->sub_matrix_id << endl;
     assert(this->meta_data_set_ptr->is_exist(pos, metadata_name, this->sub_matrix_id) == true);
 
@@ -2505,7 +2514,7 @@ string code_generator::code_of_for_structure()
     {
         assert(this->need_thread_level_paral == true);
     }
-    
+
     this->generate_glue_code();
 
     // 将reduction插入

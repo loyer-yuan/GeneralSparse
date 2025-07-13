@@ -1,4 +1,6 @@
 *.o
+*.log
+
 data_source/
 
 token_test

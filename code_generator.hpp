@@ -17,7 +17,7 @@ typedef struct back_up_of_metadata_register
     // vector<bool> memory_access_fusing_op_flag_vec;
     // 使用set来判断一些是不是有重复的，将上面的一条索引转换成一个字符串
     set<string> added_metadata_dependency;
-    
+
     // 被合并的变量的访问用来注明每一个层次的Metadata get中被合并范围的数据的内容
     vector<POS_TYPE> pos_of_fused_metadata_vec;
     vector<string> real_name_of_fused_metadata_vec;
@@ -32,7 +32,7 @@ typedef struct back_up_of_metadata_register
     vector<data_type> needed_shared_mem_data_type_vec;
     vector<string> needed_shared_mem_name_vec;
     vector<unsigned int> needed_shared_mem_size_vec;
-    
+
 }back_up_of_metadata_register_t;
 
 
@@ -239,7 +239,7 @@ public:
     void insert_metadata_get_token_to_spec_paral_of_for_structure(POS_TYPE pos);
 
     bool reduction_token_is_existing(POS_TYPE pos);
-    
+
     // 设定特定级别的归约token
     void set_reduction_token(POS_TYPE pos, shared_ptr<reduction_basic_token> token_ptr);
 
@@ -358,7 +358,7 @@ private:
     // vector<bool> memory_access_fusing_op_flag_vec;
     // 使用set来判断一些是不是有重复的，将上面的一条索引转换成一个字符串
     set<string> added_metadata_dependency;
-    
+
     // 被合并的变量的访问用来注明每一个层次的Metadata get中被合并范围的数据的内容
     vector<POS_TYPE> pos_of_fused_metadata_vec;
     vector<string> real_name_of_fused_metadata_vec;
@@ -390,14 +390,14 @@ private:
 
     vector<unsigned int> thread_block_num;
     vector<unsigned int> thread_num;
-    
+
     // 头部的一些代码，获取网格的结构，查看需要的代码
     bool need_the_whole_thread_block_number = false;
     bool need_the_whole_warp_num = false;
     bool need_the_whole_thread_num = false;
     bool need_warp_number_in_thread_block = false;
     bool need_thread_number_in_thread_block = false;
-    
+
     // 头部的一些代码，当前内核函数所运行在的全局线程号，warp号，线程块号
     bool need_global_thread_id = false;
     bool need_global_thread_block_id = false;
@@ -418,7 +418,7 @@ private:
     shared_ptr<var_name_token> BMTB_begin_ptr = NULL;
     shared_ptr<var_name_token> BMW_begin_ptr = NULL;
     shared_ptr<var_name_token> BMT_begin_ptr = NULL;
-    
+
     shared_ptr<var_name_token> BMTB_step = NULL;
     shared_ptr<var_name_token> BMW_step = NULL;
     shared_ptr<var_name_token> BMT_step = NULL;
