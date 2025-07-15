@@ -1,5 +1,6 @@
 #include "empty_op.hpp"
 
+/*
 empty_template_t* init_empty_template(code_builder_t* builder, unsigned long dense_block_id)
 {
     assert(builder != NULL);
@@ -24,6 +25,7 @@ empty_template_t* init_empty_template(code_builder_t* builder, unsigned long den
 
     return new_template;
 }
+*/
 
 // 模板的所有输出都是回车
 void store_template_data(empty_template_t *output_template, string output_dir)

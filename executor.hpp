@@ -1,5 +1,12 @@
 #ifndef EXECUTOR_H
 #define EXECUTOR_H
+#include "config.hpp"
+
+#include <string>
+#include <iostream>
+#include <fstream>
+
+using namespace std;
 
 // 编译源文件，查看返回值是编译是不是能通过
 bool compile_spmv_code(string execute_path);
